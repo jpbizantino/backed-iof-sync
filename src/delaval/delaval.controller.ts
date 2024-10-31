@@ -1,24 +1,44 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, Headers, Logger } from '@nestjs/common';
 import { DelavalService } from './delaval.service';
-import { DataDelavalDto } from './dto/data-delaval.dto';
 import { RegisterDelavalDto } from './dto/register-delaval.dto';
+import { DeLavalDataDto } from './dto/delaval-data.dto';
 
 @Controller('delaval')
 export class DelavalController {
   constructor(private readonly delavalService: DelavalService) {}
 
   @Post('/data')
-  create(@Body() createDelavalDto: DataDelavalDto[]) {
-    return this.delavalService.create(createDelavalDto);
+  create(
+    @Body() deLabalDataDto: DeLavalDataDto,
+    @Headers('authorization') authorization: string,
+    @Headers('HardwareKey') HardwareKey: string,
+  ) {
+    Logger.log(authorization);
+    Logger.log(HardwareKey);
+
+    this.delavalService.create(deLabalDataDto.animalData);
+
+    Logger.log(deLabalDataDto.utcDateTime);
   }
 
   @Post('/register')
-  register(@Body() registerDelavalDto: RegisterDelavalDto) {
+  register(
+    @Body() registerDelavalDto: RegisterDelavalDto,
+    @Headers('authorization') authorization: string,
+    @Headers('HardwareKey') HardwareKey: string,
+  ) {
+    Logger.log(authorization);
+    Logger.log(HardwareKey);
     return this.delavalService.register(registerDelavalDto);
   }
 
   @Get('/keepalive')
-  keepalive() {
+  keepalive(
+    @Headers('authorization') authorization: string,
+    @Headers('HardwareKey') HardwareKey: string,
+  ) {
+    Logger.log(authorization);
+    Logger.log(HardwareKey);
     return this.delavalService.keepAlive();
   }
 }

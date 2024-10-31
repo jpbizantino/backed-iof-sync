@@ -1,4 +1,4 @@
-export class DataDelavalDto {
+export class AnimalDataDto {
   oID: string;
   animalNumber: string;
   avgYield7d: string;
